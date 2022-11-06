@@ -14,10 +14,20 @@
 # define PIPEX_H
 
 #include "libft.h"
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
 
 typedef struct s_data
 {
-
+    char        *infile;
+    char        *outfile;
+    char        *cmd1;
+    char        *cmd2;
+    char        **envp;
 }				t_data;
+
+void            ft_init_data(t_data *data, int argc, char **argv, char **envp);
+void            ft_exit(t_data *data, int ret, char *message);
 
 #endif

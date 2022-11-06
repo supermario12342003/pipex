@@ -1,0 +1,5 @@
+objs/*
+.vscode
+infile
+outfile
+pipex

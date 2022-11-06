@@ -2,11 +2,10 @@
 
 int     main(int argc, char **argv, char **envp)
 {
-    t_data      hello;
+    t_data      *data;
 
-    (void)hello;
-    (void)argc;
-    (void)argv;
-    (void)envp;
+    data = NULL;
+    ft_init_data(data, argc, argv, envp);
+    ft_exit(data, 0, NULL);
     return (0);
 }
