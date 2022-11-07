@@ -9,7 +9,8 @@ void    ft_parent(t_data *data)
     close(data->outfile_fd);
     if (waitpid(data->pd, &(data->stat_loc), WUNTRACED) == -1)
         ft_exit(data, 1, NULL);
-    execve(data->cmd2_path, data->cmd2_argv, data->envp);
+    if (execve(data->cmd2_path, data->cmd2_argv, data->envp) == -1)
+        ft_exit(data, 1, NULL);
 }
 
 void    ft_child(t_data *data)
@@ -19,7 +20,8 @@ void    ft_child(t_data *data)
     close(data->fd[READ_END]);
     close(data->fd[WRITE_END]);
     close(data->infile_fd);
-    execve(data->cmd1_path, data->cmd1_argv, data->envp);
+    if (execve(data->cmd1_path, data->cmd1_argv, data->envp) == -1)
+        ft_exit(data, 1, NULL);
 }
 
 int     main(int argc, char **argv, char **envp)
