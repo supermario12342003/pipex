@@ -7,7 +7,8 @@ OBJS_DIR		= ./objs/
 
 SRCS_FILES		= main.c \
 					ft_init_data.c \
-					ft_exit.c
+					ft_exit.c \
+					ft_get_paths.c
 
 SRCS			= $(addprefix $(SRCS_DIR),$(SRCS_FILES))
 OBJS			= $(addprefix $(OBJS_DIR),$(SRCS_FILES:.c=.o))
@@ -42,5 +43,8 @@ fclean	: clean
 	@echo -e All cleaned
 
 re		: fclean all
+
+test	:
+	./pipex infile "ls -la" ls outfile
 
 .PHONY	: all clean fclean re

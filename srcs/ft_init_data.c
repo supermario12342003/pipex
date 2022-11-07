@@ -6,6 +6,9 @@ char            *ft_process_infile(t_data *data, char *infile)
         ft_exit(data, 1, "Input file is NULL");
     if (access(infile, R_OK) == -1)
         ft_exit(data, 1, "Input file is not readable.\n");
+    data->infile_fd = open(infile, O_RDONLY);
+    if (data->infile_fd == -1)
+        ft_exit(data, 1, NULL);
     return (infile);
 }
 
@@ -14,6 +17,9 @@ char            *ft_process_outfile(t_data *data, char *outfile)
     if (outfile == NULL)
         ft_exit(data, 1, "Output file is NULL");
     if (access(outfile, W_OK) == -1)
+        ft_exit(data, 1, "Output file is not writable.\n");
+    data->outfile_fd = open(outfile, O_WRONLY | O_CREAT | O_TRUNC);
+    if (data->outfile_fd == -1)
         ft_exit(data, 1, "Output file is not writable.\n");
     return (outfile);
 }
@@ -39,19 +45,33 @@ char            *ft_process_cmd(t_data *data, char *cmd)
     return (ret);
 }
 
-void            ft_init_data(t_data *data, int argc, char **argv, char **envp)
+char            **ft_get_argv(t_data *data, char *cmd)
 {
-    if (argc != 5)
-        ft_exit(data, 1, "Invalid number of arguments\n");
+    char        **ret;
+
+    ret = ft_split(cmd, ' ');
+    if (ret == NULL)
+        ft_exit(data, 1, NULL);
+    return (ret);
+}
+
+t_data          *ft_init_data(char **argv, char **envp)
+{
+    t_data      *data;
+
     data = malloc(sizeof(t_data));
     if (data == NULL)
         ft_exit(data, 1, NULL);
     ft_bzero(data, sizeof(t_data));
+    data->paths = ft_get_paths(data, envp);
     data->infile = ft_process_infile(data, argv[1]);
-    data->cmd1 = ft_process_cmd(data, argv[2]);
-    data->cmd2 = ft_process_cmd(data, argv[3]);
+    data->cmd1_str = ft_process_cmd(data, argv[2]);
+    data->cmd1_argv = ft_get_argv(data, data->cmd1_str);
+    data->cmd1_path = ft_get_cmd_path(data, data->cmd1_argv[0], data->paths);
+    data->cmd2_str = ft_process_cmd(data, argv[3]);
+    data->cmd2_argv = ft_get_argv(data, data->cmd2_str);
+    data->cmd2_path = ft_get_cmd_path(data, data->cmd2_argv[0], data->paths);
     data->outfile = ft_process_outfile(data, argv[4]);
-    //todo remove this
-    //printf("infile: %s cmd1: [%s] cmd2: [%s] outfile: %s\n", data->infile, data->cmd1, data->cmd2, data->outfile);
     data->envp = envp;
+    return (data);
 }
