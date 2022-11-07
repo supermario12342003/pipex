@@ -44,7 +44,4 @@ fclean	: clean
 
 re		: fclean all
 
-test	:
-	./pipex infile "ls -la" ls outfile
-
 .PHONY	: all clean fclean re
