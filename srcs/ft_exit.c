@@ -4,7 +4,7 @@ void            ft_free_array_of_str(char ***ptr_to_array_of_str)
 {
     size_t      i;
 
-    if (ptr_to_array_of_str == NULL)
+    if (ptr_to_array_of_str == NULL || *ptr_to_array_of_str == NULL)
         return ;
     i = 0;
     while ((*ptr_to_array_of_str)[i])
@@ -35,15 +35,36 @@ void            ft_clean(t_data *data)
     }
 }
 
-void            ft_exit(t_data *data, int ret, char *message)
+void            ft_print_error(t_data *data, char *target)
 {
-    ft_clean(data);
+    char        *err_message;
+    if (data->shell)
+    {
+        ft_putstr_fd(data->shell, 2);
+        ft_putstr_fd(": ", 2);
+    }
+    err_message = strerror(errno);
+    if (err_message)
+    {
+        ft_putstr_fd(err_message, 2);
+    }
+    if (target)
+    {
+        ft_putstr_fd(": ", 2);
+        ft_putstr_fd(target, 2);
+    }
+    ft_putstr_fd("\n", 2);
+}
+
+void            ft_exit(t_data *data, int ret, char *message, char *target)
+{
     if (ret)
     {
         if (message)
             ft_putstr_fd(message, 2);
         else
-            perror(NULL);
+            ft_print_error(data, target);
     }
+    ft_clean(data);
     exit(ret);
 }

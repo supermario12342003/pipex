@@ -18,6 +18,8 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <fcntl.h>
+#include "errno.h"
+#include "string.h"
 
 #define WRITE_END 1
 #define READ_END 0
@@ -39,11 +41,14 @@ typedef struct s_data
     pid_t       pd;
     int         stat_loc;
     int         fd[2];
+    char        *shell;
 }				t_data;
 
 t_data          *ft_init_data(char **argv, char **envp);
-void            ft_exit(t_data *data, int ret, char *message);
+void            ft_exit(t_data *data, int ret, char *message, char *target);
 void            ft_clean(t_data *data);
+char            *ft_get_shell_name(t_data *data, char **envp);
 char            **ft_get_paths(t_data *data, char **envp);
 char            *ft_get_cmd_path(t_data *data, char *prog, char **paths);
+void            ft_free_array_of_str(char ***ptr_to_array_of_str);
 #endif
