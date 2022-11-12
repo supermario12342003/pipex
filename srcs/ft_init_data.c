@@ -40,6 +40,7 @@ t_data          *ft_init_data(char **argv, char **envp)
         ft_exit(data, 1, NULL, NULL);
     ft_bzero(data, sizeof(t_data));
     data->paths = ft_get_paths(data, envp);
+    data->shell = ft_get_shell_name(data, envp);
     data->infile = argv[1];
     data->outfile = argv[4];
     data->cmd1_str = ft_process_cmd(data, argv[2]);
@@ -48,7 +49,6 @@ t_data          *ft_init_data(char **argv, char **envp)
     data->cmd2_str = ft_process_cmd(data, argv[3]);
     data->cmd2_argv = ft_get_argv(data, data->cmd2_str);
     data->cmd2_path = ft_get_cmd_path(data, data->cmd2_argv[0], data->paths);
-    data->shell = ft_get_shell_name(data, envp);
     data->envp = envp;
     return (data);
 }

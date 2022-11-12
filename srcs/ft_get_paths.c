@@ -26,16 +26,16 @@ char            *ft_get_cmd_path(t_data *data, char *prog, char **paths)
         while (paths[i])
         {
             ret = ft_strjoin_triple(data, paths[i], "/", prog);
+            if (ret == NULL)
+                ft_exit(data, 1, NULL, NULL);
             if (access(ret, X_OK) == 0)
                 return (ret);
             free(ret);
             i++;
         }
     }
-    ret = ft_strjoin("./", prog);
-    if (ret == NULL)
-        ft_exit(data, 1, NULL, NULL);
-    return (ret);
+    ft_exit(data, 127, "command not found", prog);
+    return (NULL);
 }
 
 char            *ft_get_env_var_value(char **envp, char *var_name)

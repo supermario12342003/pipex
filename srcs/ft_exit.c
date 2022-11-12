@@ -35,18 +35,22 @@ void            ft_clean(t_data *data)
     }
 }
 
-void            ft_print_error(t_data *data, char *target)
+void            ft_print_error(t_data *data, char *message, char *target)
 {
     char        *err_message;
+
     if (data->shell)
     {
         ft_putstr_fd(data->shell, 2);
         ft_putstr_fd(": ", 2);
     }
-    err_message = strerror(errno);
-    if (err_message)
+    if (message)
+        ft_putstr_fd(message, 2);
+    else
     {
-        ft_putstr_fd(err_message, 2);
+        err_message = strerror(errno);
+        if (err_message)
+            ft_putstr_fd(err_message, 2);
     }
     if (target)
     {
@@ -60,10 +64,7 @@ void            ft_exit(t_data *data, int ret, char *message, char *target)
 {
     if (ret)
     {
-        if (message)
-            ft_putstr_fd(message, 2);
-        else
-            ft_print_error(data, target);
+        ft_print_error(data, message, target);
     }
     ft_clean(data);
     exit(ret);

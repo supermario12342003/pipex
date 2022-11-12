@@ -18,7 +18,12 @@ void    ft_parent(t_data *data)
     close(data->fd[WRITE_END]);
     close(data->outfile_fd);
     if (waitpid(data->pd, &(data->stat_loc), WUNTRACED) == -1)
-        ft_exit(data, 1, NULL, NULL);
+        ft_exit(data, data->stat_loc, NULL, NULL);
+    if (data->stat_loc)
+    {
+        ft_clean(data);
+        exit(data->stat_loc);
+    }
     data->outfile_fd = ft_process_file(data, data->outfile, O_WRONLY | O_CREAT | O_TRUNC);
     if (execve(data->cmd2_path, data->cmd2_argv, data->envp) == -1)
     {
